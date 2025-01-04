@@ -3,129 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Byte</title>
+    <title>Explore Mars</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.js"></script>
     <style>
-        body {
+        /* General Reset */
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(45deg, #000000, #434343);
-            color: #ffffff;
-            cursor: url('https://cdn.pixabay.com/photo/2017/08/30/05/03/cursor-2695066_960_720.png'), auto;
-            padding-top: 60px; /* Ensure content doesn't overlap with search bar */
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Transparent Search Bar Styling */
-        #search-bar {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            width: 90%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            height: 60px;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #1a1a1a, #2e2e2e);
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            padding: 10px 20px;
+            justify-content: flex-start;
+            padding-top: 20px;
         }
 
-        .leaflet-search {
+        /* Header Section */
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 2px;
+            color: #ff6f61;
+            font-family: 'Rock Salt', cursive;
+            text-shadow: 0 0 20px rgba(255, 111, 97, 0.7), 0 0 30px rgba(255, 111, 97, 0.5);
+            animation: stoneFontAnimation 5s infinite alternate;
+            margin-bottom: 10px;
+        }
+
+        /* Search Bar Styling */
+        #search-bar {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
             display: flex;
-            width: 85%;
-            max-width: 450px;
-            background-color: rgb(203, 17, 17); /* Remove background */
-            color: #fff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-            padding: 10px 20px;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 25px;
-            transition: all 0.3s ease;
+            padding: 8px 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
         }
 
-        .leaflet-search input {
-            width: 100%;
+        .search-container input {
+            width: 80%;
             padding: 12px;
-            font-size: 16px;
+            font-size: 1.1em;
+            color: #fff;
+            background: transparent;
             border: none;
-            border-radius: 25px;
+            border-radius: 20px;
             outline: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
-            background-color: rgb(167, 98, 98); /* Remove background */
-            color: #fff;
         }
 
-        .leaflet-search input:focus {
-            box-shadow: 0 0 5px rgba(255, 165, 0, 0.6);
+        .search-container input:focus {
+            box-shadow: 0 0 8px rgba(255, 165, 0, 0.6);
+            background-color: #333;
         }
 
-        .leaflet-search input::placeholder {
-            color: #fff;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-
-        .leaflet-search input:focus::placeholder {
-            opacity: 0.5;
-        }
-
-        .leaflet-search button {
-            background: none;
-            border: none;
-            outline: none;
-            padding: 10px;
+        .search-container button {
+            padding: 12px;
+            font-size: 1.2em;
             margin-left: 10px;
+            background-color: #f8b400;
+            border: none;
+            border-radius: 50%;
+            color: #fff;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
-        .leaflet-search button:hover {
-            background-color: #ff3d00;
-            border-radius: 50%;
+        .search-container button:hover {
+            transform: scale(1.2);
+            background-color: #ff9f00;
         }
 
         /* Map Styling */
         #mars-map {
-           height: 100vh; /* Full height of the screen */
-            width: 100%;   /* Full width of the screen */
-            margin-top: 10px;
-            
+            height: 100%;
+            width: 100%;
+            flex-grow: 1;
+            margin-top: 20px;
         }
 
         /* Responsive Design */
         @media (max-width: 600px) {
-            /* Adjust map for smaller screens */
-            #mars-map {
-                height: calc(100vh - 120px); /* Adjust map height */
+            h1 {
+                font-size: 1.8em;
             }
 
-            /* Adjust search bar for smaller screens */
-            .leaflet-search {
-                width: 90%;
-                top: 70px; /* Adjust for smaller screens */
+            .search-container input {
+                font-size: 1em;
+                padding: 10px;
+            }
+
+            .search-container button {
+                font-size: 1em;
+            }
+
+            #mars-map {
+                height: calc(100vh - 200px); /* Adjust map height for small screens */
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Search Bar -->
+    <h1>Explore Mars</h1>
+
     <div id="search-bar">
-        <div id="search-input" class="leaflet-search">
-            <input type="text" id="search" placeholder="Search Mars...">
-            <button id="search-button">
-                🔍
-            </button>
+        <div class="search-container">
+            <input type="text" id="search" placeholder="Search Mars..." />
+            <button id="search-button">🔍</button>
         </div>
     </div>
 
-    <!-- Mars Map -->
     <div id="mars-map"></div>
 
     <script>
-        // Initialize the Leaflet map
         const map = L.map('mars-map', {
             center: [0, 0],
             zoom: 4,
@@ -136,7 +143,6 @@
             tap: true
         });
 
-        // Mars tile layers
         const marsTileLayer1 = L.tileLayer('https://trek.nasa.gov/tiles/Mars/EQ/Mars_MGS_MOLA_ClrShade_merge_global_463m/1.0.0/default/default028mm/{z}/{y}/{x}.jpg', {
             attribution: '&copy; NASA Mars Trek',
             tileSize: 256,
@@ -146,54 +152,47 @@
             detectRetina: true
         });
 
-        const marsTileLayer2 = L.tileLayer('https://trek.nasa.gov/tiles/Mars/EQ/Mars_MOLA_blend200ppx_HRSC_ClrShade_clon0dd_200mpp_lzw/{z}/{y}/{x}.jpg', {
-            attribution: '&copy; NASA Mars Trek',
-            tileSize: 256,
-            zoomOffset: 0,
-            maxZoom: 7,
-            minZoom: 3,
-            detectRetina: true
-        });
-
-        // Add the first layer by default
         marsTileLayer1.addTo(map);
 
-        // Layer control for toggling between layers
-        const layerControl = L.control.layers({}, {
-            "Mars Tile Layer 1": marsTileLayer1,
-            "Mars Tile Layer 2": marsTileLayer2
-        }).addTo(map);
+        const predefinedLocations = {
+            "Olympus Mons": [18.65, 226.2],
+            "Valles Marineris": [-14.5, 270.5],
+            "Curiosity Rover": [4.5895, 137.4417],
+            "Gale Crater": [4.5, 137.5],
+            "Elysium Planitia": [5.0, 135.0]
+        };
 
-        // Add event listeners to toggle layers based on checkbox selection
-        document.getElementById("layer1").addEventListener("change", function() {
-            if (this.checked) {
-                marsTileLayer1.addTo(map);
+        // Function to handle search
+        function searchLocation(query) {
+            const location = predefinedLocations[query];
+            if (location) {
+                const lat = location[0];
+                const lon = location[1];
+
+                // Center the map and place a marker
+                map.setView([lat, lon], 8);
+                if (window.selectedMarker) {
+                    map.removeLayer(window.selectedMarker); // Remove previous marker
+                }
+                window.selectedMarker = L.marker([lat, lon]).addTo(map);
+                window.selectedMarker.bindPopup(query).openPopup();
             } else {
-                map.removeLayer(marsTileLayer1);
+                alert('Location not found. Try another Mars location.');
             }
-        });
+        }
 
-        document.getElementById("layer2").addEventListener("change", function() {
-            if (this.checked) {
-                marsTileLayer2.addTo(map);
-            } else {
-                map.removeLayer(marsTileLayer2);
-            }
-        });
-
-        // Add search control
-        const searchControl = new L.Control.Search({
-            url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
-            propertyName: 'name',
-            textPlaceholder: 'Search Mars...',
-            searchLayer: map,
-            marker: false, // Disable the marker for the search result
-        }).addTo(map);
-
-        // Optional: Add search functionality to the search button
-        document.getElementById('search-button').addEventListener('click', function() {
+        // Search on clicking the search button
+        document.getElementById('search-button').addEventListener('click', function () {
             const searchQuery = document.getElementById('search').value;
-            searchControl._search(searchQuery);
+            searchLocation(searchQuery);
+        });
+
+        // Search when pressing Enter key
+        document.getElementById('search').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const searchQuery = document.getElementById('search').value;
+                searchLocation(searchQuery);
+            }
         });
     </script>
 
