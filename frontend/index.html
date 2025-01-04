@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -123,6 +122,17 @@
             text-align: center;
         }
 
+        /* Logo Styling */
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            background: url('https://your-logo-url.com/byte-logo.png') no-repeat center center;
+            background-size: contain;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
@@ -141,8 +151,14 @@
 </head>
 <body>
     <div class="stars"></div>
+    
+    <!-- Byte Logo -->
+    <div class="logo">
+        <h2>BYTE</h2>
+    </div>
+    
     <div class="container">
-        <h1>Explore the Map of Mars</h1>
+        <h1>Explore the Mars</h1>
         <p>Discover the stunning landscapes, valleys, and mysterious features of the Red Planet. The map highlights key regions of interest such as Olympus Mons, Valles Marineris, and ancient riverbeds, offering a glimpse into Mars' geological history.</p>
         <p>In addition to its awe-inspiring volcanoes and canyons, Mars is home to fascinating surface features such as polar ice caps and the possibility of ancient microbial life. This exploration of Mars aims to understand the planet's potential for human colonization in the future.</p>
         <p>The Martian atmosphere is about 100 times thinner than Earth's, primarily made up of carbon dioxide, with only trace amounts of oxygen. This presents challenges for human exploration and habitation, but with modern technology, we may one day overcome these hurdles.</p>
@@ -152,3 +168,4 @@
     <div class="mars"></div>
 </body>
 </html>
+
